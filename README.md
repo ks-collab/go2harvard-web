@@ -70,11 +70,6 @@ Set up chatbot:
 
 - In "Settings > Webhook", Set up a Data Collection Webhook. Make sure the `user_uuid` variable is included in the data collection webhook.
 
-- note that the webhook only gets triggered after all variables have been collected, and on subsequent updates to them.
-- only the variables defined in the chatbot are available to the AI. Even if you pass in other variables in the user identity verification response, and even if you see them in the chat history, the AI cannot access them.
-- for syncing of the variables between the chatbot and the app, we can use a fixed variable to store the user's ID (unique to the app) in the chat session. This variable will be included in the data collection webhook, so we can match up the variables collected by the chatbot with the right user in the app's database.
-- example values are helpful to make sure the data returned by UIV is loaded into the chat session properly.
-
 ## Features
 
 ### AI-aware Variables
@@ -89,6 +84,12 @@ Here's how it works:
 - Variables are retrieved from the chatbot via the Data Collection webhook.
 - Variables are associated with a user by including a variable to store the user's ID, so that the chatbot sends it along with the collected variables in the Data Collection webhook.
 - A single application can connect to multiple chatbots by using unique webhook URLs that identify which chatbot is connecting to the application.
+
+A few details on how variables work behind-the-scenes:
+
+- The data collection webhook only gets triggered after all variables have been collected, and subsequently on any updates to them.
+- Only the variables defined in the chatbot are accessible to the AI. Even if you pass in other variables in the user identity verification response, and even if you see them in the chat history, the AI cannot access them.
+- Providing example for each variable helps make sure the data returned by User Identity Verification is loaded into the chat session properly.
 
 ### User Identity Verification
 
