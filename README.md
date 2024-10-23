@@ -100,11 +100,11 @@ See the [User Identity Verification guide](https://guide.gpt-trainer.com/user-id
 ## Set up for Development
 
 - Create a `.env.development`, following the format in `.env.production`
-- To build the frontend using development environment variables, use this instead:
+- To build the frontend using development environment variables instead and re-build on file changes:
 
   ```
   npm install
-  npx vite build --mode development
+  npx vite build --mode development --watch
   ```
 
 - Your development server must also be accessible to the public internet, in order to receive webhook requests from `app.gpt-trainer.com`.
