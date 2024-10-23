@@ -1,5 +1,7 @@
 import { useState } from "react";
 import "./App.css";
+import { DemoCreateAccount } from "./components/create-account";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
 // load chatbot config from env vars
 type Chatbot = {
@@ -81,6 +83,7 @@ function App() {
 
   return (
     <>
+      <DemoCreateAccount />
       {formType === "login" && (
         <form onSubmit={onSubmitLogin}>
           <label>
@@ -121,6 +124,13 @@ function App() {
           </p>
         </form>
       )}
+
+      <p>
+        Learn More:
+        <a href="https://github.com/ks-collab/go2harvard-web">
+          <GitHubLogoIcon className="inline" /> GitHub
+        </a>
+      </p>
     </>
   );
 }
