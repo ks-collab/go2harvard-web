@@ -33,7 +33,7 @@ function App() {
   return (
     <>
       {token ? (
-        <div className="h-screen flex flex-col justify-center items-start p-2 gap-2">
+        <div className="h-screen flex flex-col justify-center items-start p-2 gap-2 max-w-5xl mx-auto">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost">
