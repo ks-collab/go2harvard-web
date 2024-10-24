@@ -100,12 +100,12 @@ export function LoginOrCreateAccount({
   }, [formType]);
 
   return (
-    <div className="mx-16 sm:mx-auto sm:w-full sm:max-w-md">
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-center">
+    <div className="mx-4 sm:mx-auto sm:w-full sm:max-w-md">
+      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-center">
         Go2Harvard
       </h1>
       <p className="leading-7 text-center text-sm">
-        Powered by <a href="https://gpt-trainer.com">GPT-trainer</a>
+        AI-powered College Admissions Assistant
       </p>
 
       <form className="my-4" onSubmit={formText.onSubmit}>
@@ -124,20 +124,19 @@ export function LoginOrCreateAccount({
             </div>
             {error && <p className="text-red-500 text-sm">{error}</p>}
           </CardContent>
-          <CardFooter>
+          <CardFooter className="flex-col gap-4">
             <Button className="w-full" type="submit">
               {formText.buttonText}
             </Button>
+            <p className="text-sm text-center">
+              {formText.toggleText}{" "}
+              <a href="#" onClick={() => toggleFormType()}>
+                {formText.toggleLink}
+              </a>
+            </p>
           </CardFooter>
         </Card>
       </form>
-
-      <p className="text-sm text-center">
-        {formText.toggleText}{" "}
-        <a href="#" onClick={() => toggleFormType()}>
-          {formText.toggleLink}
-        </a>
-      </p>
     </div>
   );
 }

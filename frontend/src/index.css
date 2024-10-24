@@ -5,9 +5,10 @@
 @layer base {
   :root {
     --radius: 0.5rem;
+    @apply dark:bg-gray-900 dark:text-white;
   }
 
   a {
-    @apply text-blue-600 underline;
+    @apply text-blue-600;
   }
 }

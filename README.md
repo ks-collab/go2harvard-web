@@ -2,7 +2,7 @@
 
 Go2Harvard is a college admissions AI assistant, powered by [GPT-trainer](https://gpt-trainer.com/).
 
-This application demonstrates how to use some of GPT-trainer's advanced features, such as AI-aware variables and user identity verification.
+This project also demonstrates how to use some of GPT-trainer's advanced features, such as AI-aware variables and user identity verification.
 
 ## Installation
 
