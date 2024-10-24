@@ -1,5 +1,15 @@
 import { useState } from "react";
-import "./App.css";
+
+import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { LoginOrCreateAccount } from "@/components/LoginOrCreateAccount";
 
 // load chatbot config from env vars
 type Chatbot = {
@@ -15,111 +25,78 @@ for (let i = 1; import.meta.env[`VITE_BOT_${i}_NAME`]; i++) {
   });
 }
 
-const BACKEND_URL = import.meta.env.BASE_URL;
-
 function App() {
-  const [formType, setFormType] = useState<"login" | "createAccount">("login");
   const [token, setToken] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [activeChatbot, setActiveChatbot] = useState<Chatbot>(chatbots[0]);
-
-  const onSubmitLogin = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const response = await fetch(`${BACKEND_URL}token`, {
-      method: "post",
-      body: formData,
-    });
-    const json = await response.json();
-    if (json.access_token) {
-      setToken(json.access_token);
-      setError(null);
-    } else {
-      setError("Invalid username or password. Please try again.");
-    }
-  };
-
-  const onSubmitCreateAccount = async (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const response = await fetch(`${BACKEND_URL}register`, {
-      method: "post",
-      body: formData,
-    });
-    const json = await response.json();
-    if (json.access_token) {
-      setToken(json.access_token);
-      setError(null);
-      setFormType("login");
-    } else {
-      setError("Failed to create account. Please try again.");
-    }
-  };
-
-  if (token) {
-    return (
-      <div>
-        {chatbots.map((chatbot) => (
-          <button key={chatbot.name} onClick={() => setActiveChatbot(chatbot)}>
-            {chatbot.name}
-          </button>
-        ))}
-        <div style={{ width: "92vw", height: "92vh" }}>
-          <iframe
-            src={`${activeChatbot.url}?token=${token}`}
-            width="100%"
-            height="100%"
-            style={{ border: "none" }}
-            allow="clipboard-read; clipboard-write"
-          ></iframe>
-        </div>
-      </div>
-    );
-  }
+  const [activeChatbotIndex, setActiveChatbotIndex] = useState<string>("0");
+  const activeChatbot = chatbots[Number(activeChatbotIndex)];
 
   return (
     <>
-      {formType === "login" && (
-        <form onSubmit={onSubmitLogin}>
-          <label>
-            Email:
-            <input type="email" name="username" />
-          </label>
-          <label>
-            Password:
-            <input type="password" name="password" />
-          </label>
-          <button type="submit">Login</button>
-          {error && <p style={{ color: "red" }}>{error}</p>}
-          <p>
-            New to Go2Harvard?{" "}
-            <a href="#" onClick={() => setFormType("createAccount")}>
-              Join now
+      {token ? (
+        <div className="h-screen flex flex-col justify-center items-start p-2 gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost">
+                {activeChatbot.name} <ChevronDownIcon className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuRadioGroup
+                value={activeChatbotIndex}
+                onValueChange={setActiveChatbotIndex}
+              >
+                {chatbots.map((chatbot, index) => (
+                  <DropdownMenuRadioItem value={String(index)}>
+                    {chatbot.name}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <div className="grow self-stretch">
+            <iframe
+              src={`${activeChatbot.url}?token=${token}`}
+              width="100%"
+              height="100%"
+              style={{ border: "none" }}
+              allow="clipboard-read; clipboard-write"
+            ></iframe>
+          </div>
+          <p className="leading-6 self-center text-sm text-gray-500">
+            Powered by{" "}
+            <a href="https://gpt-trainer.com" target="_blank">
+              GPT-trainer
             </a>
-          </p>
-        </form>
-      )}
-      {formType === "createAccount" && (
-        <form onSubmit={onSubmitCreateAccount}>
-          <label>
-            Email:
-            <input type="email" name="username" />
-          </label>
-          <label>
-            Password:
-            <input type="password" name="password" />
-          </label>
-          <button type="submit">Create Account</button>
-          {error && <p style={{ color: "red" }}>{error}</p>}
-          <p>
-            Already have an account?{" "}
-            <a href="#" onClick={() => setFormType("login")}>
-              Login
+            . Learn more{" "}
+            <a
+              href="https://github.com/ks-collab/go2harvard-web"
+              target="_blank"
+            >
+              about this project
             </a>
+            .
           </p>
-        </form>
+        </div>
+      ) : (
+        <div className="h-screen flex flex-col justify-center items-stretch">
+          <div>
+            <LoginOrCreateAccount setToken={setToken} />
+            <p className="leading-6 text-center text-sm text-gray-500">
+              Powered by{" "}
+              <a href="https://gpt-trainer.com" target="_blank">
+                GPT-trainer
+              </a>
+              . Learn more{" "}
+              <a
+                href="https://github.com/ks-collab/go2harvard-web"
+                target="_blank"
+              >
+                about this project
+              </a>
+              .
+            </p>
+          </div>
+        </div>
       )}
     </>
   );

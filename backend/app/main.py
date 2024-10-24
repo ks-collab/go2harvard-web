@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Depends, status, Form
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
+from sqlmodel import select
 
 from app.auth import (
     Token,
@@ -106,6 +107,21 @@ async def register_new_user(
     password: Annotated[str, Form()],
     session: SessionDep,
 ):
+    if not username:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Missing username"
+        )
+    if not password:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Missing password"
+        )
+    # usernames are emails, which as case insensitive
+    username = username.lower()
+    if user := session.scalar(select(User).where(User.username == username)):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="User already exists"
+        )
+
     user = User(
         username=username,
         hashed_password=get_password_hash(password),

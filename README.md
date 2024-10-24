@@ -2,7 +2,7 @@
 
 Go2Harvard is a college admissions AI assistant, powered by [GPT-trainer](https://gpt-trainer.com/).
 
-This application demonstrates how to use some of GPT-trainer's advanced features, such as AI-aware variables and user identity verification.
+This project also demonstrates how to use some of GPT-trainer's advanced features, such as AI-aware variables and user identity verification.
 
 ## Installation
 
@@ -100,11 +100,11 @@ See the [User Identity Verification guide](https://guide.gpt-trainer.com/user-id
 ## Set up for Development
 
 - Create a `.env.development`, following the format in `.env.production`
-- To build the frontend using development environment variables, use this instead:
+- To build the frontend using development environment variables instead and re-build on file changes:
 
   ```
   npm install
-  npx vite build --mode development
+  npx vite build --mode development --watch
   ```
 
 - Your development server must also be accessible to the public internet, in order to receive webhook requests from `app.gpt-trainer.com`.
